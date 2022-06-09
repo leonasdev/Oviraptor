@@ -18,10 +18,12 @@ public class throwhook : MonoBehaviour
 
     public float rotateSpeed = 0.2f;
 
+    public Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -60,5 +62,14 @@ public class throwhook : MonoBehaviour
     void Update()
     {
         mouseHolding = Input.GetMouseButton(0);
+
+        if(mouseHolding)
+        {
+            animator.SetBool("IsSwing", true);
+        }
+        else
+        {
+            animator.SetBool("IsSwing", false);
+        }
     }
 }
