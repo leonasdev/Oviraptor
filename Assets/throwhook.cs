@@ -17,6 +17,7 @@ public class throwhook : MonoBehaviour
     public float rolledUpSpeed = 0.1f;
 
     public float rotateSpeed = 0.2f;
+    public float rotateSpeedMin = 500f;
 
     public Animator animator;
 
@@ -42,6 +43,7 @@ public class throwhook : MonoBehaviour
                 ropeActive = true;
             }
             transform.position = Vector2.MoveTowards(transform.position, destiny, rolledUpSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0, 0, -200);
             // GetComponent<Rigidbody2D>().gravityScale = 8;
         }
         else
@@ -53,7 +55,7 @@ public class throwhook : MonoBehaviour
 
                 ropeActive = false;
             }
-            GetComponent<Rigidbody2D>().transform.Rotate(0, 0, GetComponent<Rigidbody2D>().velocity.x * rotateSpeed * Time.deltaTime);
+            GetComponent<Rigidbody2D>().transform.Rotate(0, 0, rotateSpeedMin +  GetComponent<Rigidbody2D>().velocity.x * rotateSpeed * Time.deltaTime);
             // GetComponent<Rigidbody2D>().gravityScale = 8;
         }
     }
@@ -70,6 +72,12 @@ public class throwhook : MonoBehaviour
         else
         {
             animator.SetBool("IsSwing", false);
+        }
+
+        if(Input.GetKeyUp(KeyCode.R))
+        {
+            transform.position = new Vector3(-80, 14, 0);
+            Debug.Log("R");
         }
     }
 }
