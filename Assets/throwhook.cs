@@ -38,13 +38,16 @@ public class throwhook : MonoBehaviour
                 // 實例Hook(參考物件, 目前位置(player的), 角度?)
                 curHook = (GameObject)Instantiate(hook, transform.position, Quaternion.identity);
 
+                // 計算起點到終點的方向
                 Vector2 direction = destiny - (Vector2)transform.position;
                 direction = direction.normalized;
+                // 從起點以direction的方向 尋找是否有物件(用LayerMask當filter)
                 RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Square"));
 
+                // 如果發射方向有物件就射在物件上，沒有的話就射在終點上
                 if (hit)
                 {
-                     curHook.GetComponent<RopeScript>().destiny = hit.point;
+                    curHook.GetComponent<RopeScript>().destiny = hit.point;
                 }
                 else
                 {
