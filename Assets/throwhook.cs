@@ -32,13 +32,25 @@ public class throwhook : MonoBehaviour
         if (mouseHolding)
         {
             Vector2 destiny = new Vector2(transform.position.x + endPoint_x, endPoint_y);
+
             if (ropeActive == false)
             {
                 // 實例Hook(參考物件, 目前位置(player的), 角度?)
                 curHook = (GameObject)Instantiate(hook, transform.position, Quaternion.identity);
 
-                // 將Hook終點設為終點
-                curHook.GetComponent<RopeScript>().destiny = destiny;
+                Vector2 direction = destiny - (Vector2)transform.position;
+                direction = direction.normalized;
+                RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Square"));
+
+                if (hit)
+                {
+                     curHook.GetComponent<RopeScript>().destiny = hit.point;
+                }
+                else
+                {
+                    // 將Hook終點設為終點
+                    curHook.GetComponent<RopeScript>().destiny = destiny;
+                }
 
                 ropeActive = true;
             }
