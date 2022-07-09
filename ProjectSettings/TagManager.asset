@@ -41,6 +41,12 @@ TagManager:
   - name: Background
     uniqueID: 3367170075
     locked: 0
+  - name: Test
+    uniqueID: 4163928819
+    locked: 0
+  - name: MainCharacter
+    uniqueID: 137840331
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

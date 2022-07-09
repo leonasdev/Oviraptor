@@ -21,10 +21,13 @@ public class throwhook : MonoBehaviour
 
     public Animator animator;
 
+    private Vector2 initPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        initPosition = transform.position;
     }
 
     void FixedUpdate()
@@ -91,8 +94,7 @@ public class throwhook : MonoBehaviour
 
         if(Input.GetKeyUp(KeyCode.R))
         {
-            transform.position = new Vector3(-80, 14, 0);
-            Debug.Log("R");
+            transform.position = initPosition;
         }
     }
 }
