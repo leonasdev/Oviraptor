@@ -1,3 +1,4 @@
+#if (UNITY_EDITOR)
 using System.IO;
 using System.Threading;
 using UnityEditor;
@@ -45,3 +46,4 @@ public class FileWatcher
         SetRefresh = false;
     }
 }
+#endif
