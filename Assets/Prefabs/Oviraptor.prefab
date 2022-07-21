@@ -122,9 +122,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hook: {fileID: 7112306745408586138, guid: 2404c3dc7e7b76048a38fccfaedb6bed, type: 3}
-  forceToAdd: 10
   endPoint_x: 15
   endPoint_y: 32
+  rolledUpSpeed: 0.1
+  rotateSpeed: 0.2
+  rotateSpeedMin: 500
+  animator: {fileID: 0}
 --- !u!114 &5967189268339689820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60c9b3a60d97b44583e12c6afe73e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceToAdd: 100
 --- !u!70 &1281181086370782946
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

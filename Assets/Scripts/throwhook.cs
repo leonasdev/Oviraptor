@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class throwhook : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class throwhook : MonoBehaviour
     public Animator animator;
 
     private Vector2 initPosition;
+
+    // for RotateBuffer()
+    public float targetAngle;
+    public float rotateBufferSpeedDvided;
+    float t;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +51,7 @@ public class throwhook : MonoBehaviour
                 Vector2 direction = destiny - (Vector2)transform.position;
                 direction = direction.normalized;
                 // 從起點以direction的方向 尋找是否有物件(用LayerMask當filter)
-                RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Square"));
+                RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Obstacle"));
 
                 // 如果發射方向有物件就射在物件上，沒有的話就射在終點上
                 if (hit)
@@ -61,8 +67,7 @@ public class throwhook : MonoBehaviour
                 ropeActive = true;
             }
             transform.position = Vector2.MoveTowards(transform.position, destiny, rolledUpSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Euler(0, 0, -200);
-            // GetComponent<Rigidbody2D>().gravityScale = 8;
+            RotateBuffer();
         }
         else
         {
@@ -70,11 +75,12 @@ public class throwhook : MonoBehaviour
             {
                 // delete rope
                 Destroy(curHook);
-
                 ropeActive = false;
             }
+
+            // 懸空時以固定速度旋轉
             GetComponent<Rigidbody2D>().transform.Rotate(0, 0, rotateSpeedMin +  GetComponent<Rigidbody2D>().velocity.x * rotateSpeed * Time.deltaTime);
-            // GetComponent<Rigidbody2D>().gravityScale = 8;
+            t = 0; // for RotateBuffer()
         }
     }
 
@@ -94,7 +100,21 @@ public class throwhook : MonoBehaviour
 
         if(Input.GetKeyUp(KeyCode.R))
         {
-            transform.position = initPosition;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Obstacle")
+        {
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    void RotateBuffer() // 以固定轉向慢慢轉到目標角度
+    {
+        t += Time.deltaTime / rotateBufferSpeedDvided;
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, targetAngle, t));
     }
 }
