@@ -71,3 +71,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Assets/FileWatcher.cs.meta
+
+/Assets/TextMesh Pro/
+/Assets/TextMesh Pro.meta
