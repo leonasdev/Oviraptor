@@ -9,18 +9,22 @@ public class throwhook : MonoBehaviour
 
     GameObject curHook;
 
+    Rigidbody2D playerRigidbody;
+
     bool ropeActive = false;
     bool mouseHolding = false;
+    bool isBreak = false;
 
     public float endPoint_x = 10;
     public float endPoint_y = 32;
 
-    public float rolledUpSpeed = 0.1f;
+    private float rolledUpSpeed;
 
     public float rotateSpeed = 0.2f;
     public float rotateSpeedMin = 500f;
 
     public Animator animator;
+    public Sprite breakedEgg;
 
     private Vector2 initPosition;
 
@@ -29,11 +33,15 @@ public class throwhook : MonoBehaviour
     public float rotateBufferSpeedDvided;
     float t;
 
+    public float velocityLimitX;
+    public float velocityLimitDecaySpeed;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         initPosition = transform.position;
+        playerRigidbody = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -46,6 +54,7 @@ public class throwhook : MonoBehaviour
             {
                 // 實例Hook(參考物件, 目前位置(player的), 角度?)
                 curHook = (GameObject)Instantiate(hook, transform.position, Quaternion.identity);
+                curHook.name = "curHook";
 
                 // 計算起點到終點的方向
                 Vector2 direction = destiny - (Vector2)transform.position;
@@ -56,7 +65,9 @@ public class throwhook : MonoBehaviour
                 // 如果發射方向有物件就射在物件上，沒有的話就射在終點上
                 if (hit)
                 {
-                    curHook.GetComponent<RopeScript>().destiny = hit.point;
+                    // 讓接觸面在物件最上面
+                    Vector2 hitPointTop = new Vector2(hit.point.x, hit.point.y - breakedEgg.bounds.size.y / 2);
+                    curHook.GetComponent<RopeScript>().destiny = hitPointTop;
                 }
                 else
                 {
@@ -66,7 +77,17 @@ public class throwhook : MonoBehaviour
 
                 ropeActive = true;
             }
-            transform.position = Vector2.MoveTowards(transform.position, destiny, rolledUpSpeed * Time.deltaTime);
+
+            if((Vector2)curHook.transform.position == curHook.GetComponent<RopeScript>().destiny)
+            {
+                isBreak = true;
+            }
+
+            if(isBreak)
+            {
+                // 腳色漸漸靠向destiny
+                transform.position = Vector2.MoveTowards(transform.position, destiny, rolledUpSpeed * Time.deltaTime);
+            }
             RotateBuffer();
         }
         else
@@ -76,17 +97,21 @@ public class throwhook : MonoBehaviour
                 // delete rope
                 Destroy(curHook);
                 ropeActive = false;
+                isBreak = false;
             }
 
             // 懸空時以固定速度旋轉
-            GetComponent<Rigidbody2D>().transform.Rotate(0, 0, rotateSpeedMin +  GetComponent<Rigidbody2D>().velocity.x * rotateSpeed * Time.deltaTime);
+            playerRigidbody.transform.Rotate(0, 0, rotateSpeedMin +  playerRigidbody.velocity.x * rotateSpeed * Time.deltaTime);
             t = 0; // for RotateBuffer()
         }
+        VelocityLimiter();
     }
 
     // Update is called once per frame
     void Update()
     {
+        rolledUpSpeed = PlayerState.RolledUpSpeed;
+        velocityLimitX = PlayerState.VelocityLimitX;
         mouseHolding = Input.GetMouseButton(0);
 
         if(mouseHolding)
@@ -98,9 +123,39 @@ public class throwhook : MonoBehaviour
             animator.SetBool("IsSwing", false);
         }
 
+        if(curHook != null)
+        {
+            if(isBreak)
+            {
+                curHook.GetComponent<Animator>().SetBool("isBreak", true);
+            }
+            else
+            {
+                curHook.GetComponent<Animator>().SetBool("isBreak", false);
+            }
+        }
+
         if(Input.GetKeyUp(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if(Input.GetKeyUp(KeyCode.A))
+        {
+            PlayerState.RolledUpSpeed -= 5;
+        }
+        else if(Input.GetKeyUp(KeyCode.S))
+        {
+            PlayerState.RolledUpSpeed += 5;
+        }
+
+        if(Input.GetKeyUp(KeyCode.Z))
+        {
+            PlayerState.VelocityLimitX -= 5;
+        }
+        else if(Input.GetKeyUp(KeyCode.X))
+        {
+            PlayerState.VelocityLimitX += 5;
         }
     }
 
@@ -115,6 +170,21 @@ public class throwhook : MonoBehaviour
     void RotateBuffer() // 以固定轉向慢慢轉到目標角度
     {
         t += Time.deltaTime / rotateBufferSpeedDvided;
-        transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, targetAngle, t));
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(transform.rotation.eulerAngles.z, targetAngle, 1));
+    }
+
+    void VelocityLimiter()
+    {
+        float velocity_x = playerRigidbody.velocity.x;
+
+        if(velocity_x > 0 && velocity_x > velocityLimitX)
+        {
+            playerRigidbody.AddForce(new Vector2(velocityLimitX - velocity_x, 0) * velocityLimitDecaySpeed);
+        }
+        else if(velocity_x < 0 && -velocity_x > velocityLimitX)
+        {
+            // TODO: 往後甩的限速
+            // playerRigidbody.AddForce(new Vector2(-velocityLimit_x - velocity_x, 0)*10);
+        }
     }
 }

@@ -57,17 +57,15 @@ public class RopeScript : MonoBehaviour
             {
                 CreateNode();
             }
-
             lastNode.GetComponent<HingeJoint2D>().connectedBody = player.GetComponent<Rigidbody2D>();
         }
 
-        RenderLine();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        RenderLine();
     }
 
     void RenderLine()
@@ -81,7 +79,6 @@ public class RopeScript : MonoBehaviour
         }
 
         lr.SetPosition(i, player.transform.position);
-
     }
 
     void CreateNode()
