@@ -7,16 +7,16 @@ public class throwhook : MonoBehaviour
 {
     public GameObject hook;
 
-    GameObject curHook;
+    private GameObject curHook;
 
-    Rigidbody2D playerRigidbody;
+    private Rigidbody2D playerRigidbody;
 
-    bool ropeActive = false;
-    bool mouseHolding = false;
-    bool isBreak = false;
+    private bool ropeActive = false;
+    private bool mouseHolding = false;
+    private bool isBreak = false;
 
     public float endPoint_x = 10;
-    public float endPoint_y = 32;
+    public GameObject ceiling;
 
     private float rolledUpSpeed;
 
@@ -31,7 +31,7 @@ public class throwhook : MonoBehaviour
     // for RotateBuffer()
     public float targetAngle;
     public float rotateBufferSpeedDvided;
-    float t;
+    private float t;
 
     public float velocityLimitX;
     public float velocityLimitDecaySpeed;
@@ -48,30 +48,30 @@ public class throwhook : MonoBehaviour
     {
         if (mouseHolding)
         {
-            Vector2 destiny = new Vector2(transform.position.x + endPoint_x, endPoint_y);
+            Vector2 destiny = new Vector2(transform.position.x + endPoint_x, ceiling.transform.position.y);
 
             if (ropeActive == false)
             {
-                // ¹ê¨ÒHook(°Ñ¦Òª«¥ó, ¥Ø«e¦ì¸m(playerªº), ¨¤«×?)
+                // å¯¦ä¾‹Hook(åƒè€ƒç‰©ä»¶, ç›®å‰ä½ç½®(playerçš„), è§’åº¦)
                 curHook = (GameObject)Instantiate(hook, transform.position, Quaternion.identity);
                 curHook.name = "curHook";
 
-                // ­pºâ°_ÂI¨ì²×ÂIªº¤è¦V
+                // è¨ˆç®—èµ·é»åˆ°çµ‚é»çš„æ–¹å‘
                 Vector2 direction = destiny - (Vector2)transform.position;
                 direction = direction.normalized;
-                // ±q°_ÂI¥Hdirectionªº¤è¦V ´M§ä¬O§_¦³ª«¥ó(¥ÎLayerMask·ífilter)
+                // å¾èµ·é»ä»¥directionçš„æ–¹å‘ å°‹æ‰¾æ˜¯å¦æœ‰ç‰©ä»¶(ç”¨LayerMaskç•¶filter)
                 RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Obstacle"));
 
-                // ¦pªGµo®g¤è¦V¦³ª«¥ó´N®g¦bª«¥ó¤W¡A¨S¦³ªº¸Ü´N®g¦b²×ÂI¤W
+                // å¦‚æœç™¼å°„æ–¹å‘æœ‰ç‰©ä»¶å°±å°„åœ¨ç‰©ä»¶ä¸Šï¼Œæ²’æœ‰çš„è©±å°±å°„åœ¨çµ‚é»ä¸Š
                 if (hit)
                 {
-                    // Åı±µÄ²­±¦bª«¥ó³Ì¤W­±
+                    // è®“æ¥è§¸é¢åœ¨ç‰©ä»¶æœ€ä¸Šé¢
                     Vector2 hitPointTop = new Vector2(hit.point.x, hit.point.y - breakedEgg.bounds.size.y / 2);
                     curHook.GetComponent<RopeScript>().destiny = hitPointTop;
                 }
                 else
                 {
-                    // ±NHook²×ÂI³]¬°²×ÂI
+                    // å°‡Hookçµ‚é»è¨­ç‚ºçµ‚é»
                     curHook.GetComponent<RopeScript>().destiny = destiny;
                 }
 
@@ -85,7 +85,7 @@ public class throwhook : MonoBehaviour
 
             if(isBreak)
             {
-                // ¸}¦âº¥º¥¾a¦Vdestiny
+                // è…³è‰²æ¼¸æ¼¸é å‘destiny
                 transform.position = Vector2.MoveTowards(transform.position, destiny, rolledUpSpeed * Time.deltaTime);
             }
             RotateBuffer();
@@ -100,7 +100,7 @@ public class throwhook : MonoBehaviour
                 isBreak = false;
             }
 
-            // ÄaªÅ®É¥H©T©w³t«×±ÛÂà
+            // æ‡¸ç©ºæ™‚ä»¥å›ºå®šé€Ÿåº¦æ—‹è½‰
             playerRigidbody.transform.Rotate(0, 0, rotateSpeedMin +  playerRigidbody.velocity.x * rotateSpeed * Time.deltaTime);
             t = 0; // for RotateBuffer()
         }
@@ -163,11 +163,11 @@ public class throwhook : MonoBehaviour
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
-    void RotateBuffer() // ¥H©T©wÂà¦VºCºCÂà¨ì¥Ø¼Ğ¨¤«×
+    void RotateBuffer() // ä»¥å›ºå®šè½‰å‘æ…¢æ…¢è½‰åˆ°ç›®æ¨™è§’åº¦
     {
         t += Time.deltaTime / rotateBufferSpeedDvided;
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(transform.rotation.eulerAngles.z, targetAngle, 1));
@@ -183,7 +183,7 @@ public class throwhook : MonoBehaviour
         }
         else if(velocity_x < 0 && -velocity_x > velocityLimitX)
         {
-            // TODO: ©¹«á¥Ïªº­­³t
+            // TODO: å¾€å¾Œç”©çš„é™é€Ÿ
             // playerRigidbody.AddForce(new Vector2(-velocityLimit_x - velocity_x, 0)*10);
         }
     }

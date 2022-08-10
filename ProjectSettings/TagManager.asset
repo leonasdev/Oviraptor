@@ -42,11 +42,14 @@ TagManager:
   - name: Background
     uniqueID: 3367170075
     locked: 0
-  - name: Test
+  - name: Obstacle
     uniqueID: 4163928819
     locked: 0
   - name: MainCharacter
     uniqueID: 137840331
+    locked: 0
+  - name: Foreground
+    uniqueID: 1331575011
     locked: 0
   - name: Default
     uniqueID: 0
