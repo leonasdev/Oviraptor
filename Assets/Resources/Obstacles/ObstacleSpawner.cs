@@ -46,11 +46,11 @@ public class ObstacleSpawner : MonoBehaviour
 
     void SpawnObstacle()
     {
-        float x = obstacleSpawnedList.Count == 0 ? player.transform.position.x : obstacleSpawnedList[obstacleSpawnedList.Count-1].transform.position.x;
-        x += distanceBetweenObstacle;
-
         if(obstacleSpawnedList.Count < maxObstacleNum)
         {
+            float x = obstacleSpawnedList.Count == 0 ? player.transform.position.x : obstacleSpawnedList[obstacleSpawnedList.Count-1].transform.position.x;
+            x += distanceBetweenObstacle;
+
             // 要產生亂數的範圍要在Inspector的AnimatorCurve調整
             int select = GetRandomNumberWithMaxRepaet(2);
             Vector3 v = new Vector3(x, obstaclePositionYList[select], 0);
