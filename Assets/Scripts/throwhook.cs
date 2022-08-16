@@ -42,6 +42,9 @@ public class throwhook : MonoBehaviour
         animator = GetComponent<Animator>();
         initPosition = transform.position;
         playerRigidbody = GetComponent<Rigidbody2D>();
+
+        PlayerState.RolledUpSpeed = 30;
+        PlayerState.VelocityLimitX = 25;
     }
 
     void FixedUpdate()
@@ -163,7 +166,7 @@ public class throwhook : MonoBehaviour
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
