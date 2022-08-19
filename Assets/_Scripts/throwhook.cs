@@ -115,7 +115,7 @@ public class throwhook : MonoBehaviour
     {
         rolledUpSpeed = PlayerState.RolledUpSpeed;
         velocityLimitX = PlayerState.VelocityLimitX;
-        mouseHolding = Input.GetMouseButton(0);
+        mouseHolding = Input.GetMouseButton(0) && InputManager.Instance.InputEnable;
 
         if(mouseHolding)
         {

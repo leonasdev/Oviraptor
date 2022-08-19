@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Oviraptor.unity
+    path: Assets/Scenes/Main.unity
     guid: e0f1ac601d6d41f4ebfbff59ab0865c8
   m_configObjects: {}

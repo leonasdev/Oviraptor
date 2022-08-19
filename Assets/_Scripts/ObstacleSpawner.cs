@@ -14,6 +14,8 @@ public class ObstacleSpawner : MonoBehaviour
     public GameObject ceiling;
     public GameObject flooring;
 
+    public float startX;
+
     public float minDistanceBetweenObstacle;
 
     public float minXDistanceRandom;
@@ -68,7 +70,7 @@ public class ObstacleSpawner : MonoBehaviour
             // 要產生亂數的範圍要在Inspector的AnimatorCurve調整
             int select = GetRandomNumberWithMaxRepaet(2);
 
-            float x = obstacleSpawnedList.Count == 0 ? player.transform.position.x : obstacleSpawnedList[obstacleSpawnedList.Count-1].transform.position.x;
+            float x = obstacleSpawnedList.Count == 0 ? player.transform.position.x + startX : obstacleSpawnedList[obstacleSpawnedList.Count-1].transform.position.x;
             x += minDistanceBetweenObstacle;
             x += Random.Range(minXDistanceRandom, maxXDistanceRandom);
 
