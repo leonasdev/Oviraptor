@@ -11,6 +11,9 @@ public class InputManager : MonoBehaviour
     public int ButtonUpCount {get => buttonUpCount;}
     private int buttonUpCount;
 
+    public int ButtonDownCount {get => buttonDownCount;}
+    private int buttonDownCount;
+
     void Awake()
     {
         Instance = this;
@@ -23,9 +26,12 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
+        if (Input.GetMouseButtonUp(0)) {
             buttonUpCount++;
+        }
+
+        if (Input.GetMouseButtonDown(0)) {
+            buttonDownCount++;
         }
     }
 }

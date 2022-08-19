@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.touchCount > 0) {
+        if(InputManager.Instance.ButtonDownCount > 0) {
             UpdateGameState(GameState.Playing);
         }
 
