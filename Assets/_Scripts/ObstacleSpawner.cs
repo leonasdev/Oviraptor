@@ -39,14 +39,6 @@ public class ObstacleSpawner : MonoBehaviour
 
     void Start()
     {
-        Object[] objects = Resources.LoadAll("Obstacles", typeof(GameObject));
-
-        foreach(Object o in objects) 
-        {
-            GameObject gameObject = (GameObject) o;
-            obstacleList.Add(gameObject);
-        }
-
         obstaclePositionYList.Add(ceiling.transform.position.y - obstacleList[0].GetComponent<Renderer>().bounds.size.y / 2);
         obstaclePositionYList.Add(flooring.transform.position.y + obstacleList[1].GetComponent<Renderer>().bounds.size.y / 2);
         obstaclePositionYList.Add(ceiling.transform.position.y - obstacleList[2].GetComponent<Renderer>().bounds.size.y / 2);

@@ -169,7 +169,11 @@ public class throwhook : MonoBehaviour
     {
         if (!GameManager.Instance.notDie && collision.gameObject.tag == "Obstacle")
         {
-            SceneManager.LoadScene("Main");
+            // SceneManager.LoadScene("Main");
+            Destroy(curHook);
+            ropeActive = false;
+            isBreak = false;
+            GameManager.Instance.UpdateGameState(GameState.GameOver);
         }
     }
 

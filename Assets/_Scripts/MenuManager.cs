@@ -7,6 +7,9 @@ using TMPro;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField]
+    private GameObject _mainMenuCanvas;
+
+    [SerializeField]
     private GameObject _settingsButton, _collectionsButton, _tapToStart;
 
     [SerializeField]
@@ -24,10 +27,11 @@ public class MenuManager : MonoBehaviour
 
     private void GameManagerOnOnGameStateChanged(GameState state)
     {
-        _tapToStart.SetActive(state == GameState.MainMenu);
-        _settingsButton.SetActive(state == GameState.MainMenu);
-        _collectionsButton.SetActive(state == GameState.MainMenu);
-        _tapToStartText.enabled = state == GameState.MainMenu;
+        // _tapToStart.SetActive(state == GameState.MainMenu);
+        // _settingsButton.SetActive(state == GameState.MainMenu);
+        // _collectionsButton.SetActive(state == GameState.MainMenu);
+        // _tapToStartText.enabled = state == GameState.MainMenu;
+        _mainMenuCanvas.SetActive(state == GameState.MainMenu);
     }
 
     public void OnSettingsButtonPress()
