@@ -6,7 +6,7 @@ using UnityEditor;
 [InitializeOnLoad]
 public class FileWatcher
 {
-    public static string ScriptPath = "C:/Users/s8952/Desktop/Oviraptor/Assets/Scripts";
+    public static string ScriptPath = "C:/Users/s8952/Desktop/Oviraptor/Assets/_Scripts";
     public static bool SetRefresh;
  
     static FileWatcher()

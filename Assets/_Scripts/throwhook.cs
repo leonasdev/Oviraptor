@@ -36,6 +36,8 @@ public class throwhook : MonoBehaviour
     public float velocityLimitX;
     public float velocityLimitDecaySpeed;
 
+    public float cutOffForce;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,8 +45,8 @@ public class throwhook : MonoBehaviour
         initPosition = transform.position;
         playerRigidbody = GetComponent<Rigidbody2D>();
 
-        PlayerState.RolledUpSpeed = 30;
-        PlayerState.VelocityLimitX = 25;
+        PlayerState.RolledUpSpeed = 40;
+        PlayerState.VelocityLimitX = 45;
     }
 
     void FixedUpdate()
@@ -89,7 +91,7 @@ public class throwhook : MonoBehaviour
             if(isBreak)
             {
                 // 腳色漸漸靠向destiny
-                transform.position = Vector2.MoveTowards(transform.position, destiny, rolledUpSpeed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, curHook.GetComponent<RopeScript>().destiny, rolledUpSpeed * Time.deltaTime);
             }
             RotateBuffer();
         }
@@ -101,6 +103,7 @@ public class throwhook : MonoBehaviour
                 Destroy(curHook);
                 ropeActive = false;
                 isBreak = false;
+                playerRigidbody.AddForce(Vector2.up * cutOffForce, ForceMode2D.Impulse);
             }
 
             // 懸空時以固定速度旋轉
@@ -115,7 +118,7 @@ public class throwhook : MonoBehaviour
     {
         rolledUpSpeed = PlayerState.RolledUpSpeed;
         velocityLimitX = PlayerState.VelocityLimitX;
-        mouseHolding = Input.GetMouseButton(0) && InputManager.Instance.InputEnable;
+        mouseHolding = Input.GetMouseButton(0);
 
         if(mouseHolding)
         {
@@ -164,9 +167,9 @@ public class throwhook : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Obstacle")
+        if (!GameManager.Instance.notDie && collision.gameObject.tag == "Obstacle")
         {
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("Main");
         }
     }
 

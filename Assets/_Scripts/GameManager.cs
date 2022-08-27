@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState 
 {
     Playing,
-    EggCool,
+    Collections,
     MainMenu,
     GameOver
 }
@@ -20,6 +21,8 @@ public class GameManager : MonoBehaviour
     public static event Action<GameState> OnGameStateChanged;
 
     public GameObject player;
+
+    public bool notDie = false;
 
     void Awake()
     {
@@ -41,7 +44,7 @@ public class GameManager : MonoBehaviour
             case GameState.MainMenu:
                 HandleMainMenu();
                 break;
-            case GameState.EggCool:
+            case GameState.Collections:
                 break;
             case GameState.Playing:
                 HandlePlaying();
@@ -59,8 +62,6 @@ public class GameManager : MonoBehaviour
     {
         player.GetComponent<throwhook>().enabled = false;
         player.GetComponent<Rigidbody2D>().isKinematic = true;
-
-        InputManager.Instance.InputEnable = false;
     }
 
     private void HandlePlaying()
@@ -72,11 +73,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if(InputManager.Instance.ButtonDownCount > 0) {
-            UpdateGameState(GameState.Playing);
+            // UpdateGameState(GameState.Playing);
         }
 
         if(InputManager.Instance.ButtonUpCount > 0) {
-            InputManager.Instance.InputEnable = true;
+            // InputManager.Instance.InputEnable = true;
         }
     }
 }
