@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _scoreText;
 
+    [SerializeField] private ObstacleSpawner _obstacleSpawner;
+
     void Awake()
     {
         Instance = this;
@@ -86,6 +88,9 @@ public class GameManager : MonoBehaviour
         player.transform.position = initPlayerPos;
         player.GetComponent<throwhook>().enabled = true;
         player.GetComponent<Rigidbody2D>().isKinematic = false;
+        
+        _obstacleSpawner.EnableSpawn = true;
+        _obstacleSpawner.Reset();
     }
 
     private void HandleGameOver()

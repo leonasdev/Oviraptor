@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ObstacleSpawner : MonoBehaviour
 {
+    public bool EnableSpawn;
+
     public List<GameObject> obstacleList = new List<GameObject>();
     public List<float> obstaclePositionYList = new List<float>();
     public List<GameObject> obstacleSpawnedList = new List<GameObject>();
@@ -45,8 +47,10 @@ public class ObstacleSpawner : MonoBehaviour
     }
     void FixedUpdate()
     {
-        SpawnObstacle();
-        DestroyObstacle();
+        if(EnableSpawn) {
+            SpawnObstacle();
+            DestroyObstacle();
+        }
         // int s = GetRandomNumberWithMaxRepaet(2);
         // debugCount++;
         // debugList.Add(s);
@@ -133,5 +137,18 @@ public class ObstacleSpawner : MonoBehaviour
         // 這邊要跟YDistanceRandomCurve一起動
         float lastPointTime = yDistanceRandomCurve.keys[yDistanceRandomCurve.keys.Length - 1].time;
         return (float)yDistanceRandomCurve.Evaluate(Random.Range(0, lastPointTime));
+    }
+
+    private void DestroyAll()
+    {
+        foreach(GameObject o in obstacleSpawnedList) {
+            Destroy(o);
+        }
+    }
+
+    public void Reset()
+    {
+        DestroyAll();
+        obstacleSpawnedList.Clear();
     }
 }
