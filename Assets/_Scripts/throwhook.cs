@@ -13,9 +13,14 @@ public class throwhook : MonoBehaviour
 
     private bool ropeActive = false;
     private bool mouseHolding = false;
+    private bool mouseHolding_r = false;
     private bool isBreak = false;
 
     public float endPoint_x = 10;
+    public float endPoint_y;
+    public float endPointR_x;
+    public float endPointR_y;
+
     public GameObject ceiling;
 
     private float rolledUpSpeed;
@@ -38,6 +43,8 @@ public class throwhook : MonoBehaviour
 
     public float cutOffForce;
 
+    private bool flag;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,15 +52,19 @@ public class throwhook : MonoBehaviour
         initPosition = transform.position;
         playerRigidbody = GetComponent<Rigidbody2D>();
 
-        PlayerState.RolledUpSpeed = 40;
+        PlayerState.RolledUpSpeed = 20;
         PlayerState.VelocityLimitX = 45;
     }
 
     void FixedUpdate()
     {
-        if (mouseHolding)
+        if (mouseHolding || mouseHolding_r)
         {
-            Vector2 destiny = new Vector2(transform.position.x + endPoint_x, ceiling.transform.position.y);
+            // Vector2 destiny = new Vector2(transform.position.x + endPoint_x, ceiling.transform.position.y);
+            Vector2 destiny = new Vector2(0, 0);
+            if(flag) destiny = new Vector2(transform.position.x + endPoint_x, transform.position.y + endPoint_y);
+            else destiny = new Vector2(transform.position.x + endPointR_x, transform.position.y + endPointR_y);
+            flag = !flag;
 
             if (ropeActive == false)
             {
@@ -107,7 +118,7 @@ public class throwhook : MonoBehaviour
             }
 
             // 懸空時以固定速度旋轉
-            playerRigidbody.transform.Rotate(0, 0, rotateSpeedMin +  playerRigidbody.velocity.x * rotateSpeed * Time.deltaTime);
+            playerRigidbody.transform.Rotate(0, 0, rotateSpeedMin + Mathf.Abs(playerRigidbody.velocity.x) * rotateSpeed * Time.deltaTime);
             t = 0; // for RotateBuffer()
         }
         VelocityLimiter();
@@ -119,8 +130,11 @@ public class throwhook : MonoBehaviour
         rolledUpSpeed = PlayerState.RolledUpSpeed;
         velocityLimitX = PlayerState.VelocityLimitX;
         mouseHolding = Input.GetMouseButton(0);
+        // if(mouseHolding) mouseHolding_r = false;
+        // else mouseHolding_r = Input.GetMouseButton(1);
+        // print($"left: {mouseHolding} right: {mouseHolding_r}");
 
-        if(mouseHolding)
+        if(mouseHolding || mouseHolding_r)
         {
             animator.SetBool("IsSwing", true);
         }
@@ -185,6 +199,7 @@ public class throwhook : MonoBehaviour
 
     void VelocityLimiter()
     {
+        print(playerRigidbody.velocity);
         float velocity_x = playerRigidbody.velocity.x;
 
         if(velocity_x > 0 && velocity_x > velocityLimitX)
@@ -193,8 +208,11 @@ public class throwhook : MonoBehaviour
         }
         else if(velocity_x < 0 && -velocity_x > velocityLimitX)
         {
-            // TODO: 往後甩的限速
-            // playerRigidbody.AddForce(new Vector2(-velocityLimit_x - velocity_x, 0)*10);
+            playerRigidbody.AddForce(new Vector2(-(velocityLimitX + velocity_x), 0) * velocityLimitDecaySpeed);
+        }
+
+        if(-playerRigidbody.velocity.y > 80) {
+            playerRigidbody.AddForce(new Vector2(0, -(playerRigidbody.velocity.y + 80)) * 20);
         }
     }
 }
