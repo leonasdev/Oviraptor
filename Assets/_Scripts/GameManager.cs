@@ -79,14 +79,14 @@ public class GameManager : MonoBehaviour
     private void HandleMainMenu()
     {
         player.transform.position = initPlayerPos;
-        player.GetComponent<throwhook>().enabled = false;
+        // player.GetComponent<throwhook>().enabled = false;
         player.GetComponent<Rigidbody2D>().isKinematic = true;
     }
 
     private void HandlePlaying()
     {
         player.transform.position = initPlayerPos;
-        player.GetComponent<throwhook>().enabled = true;
+        // player.GetComponent<throwhook>().enabled = true;
         player.GetComponent<Rigidbody2D>().isKinematic = false;
         
         _obstacleSpawner.EnableSpawn = true;
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleGameOver()
     {
-        player.GetComponent<throwhook>().enabled = false;
+        // player.GetComponent<throwhook>().enabled = false;
         player.GetComponent<Rigidbody2D>().isKinematic = true;
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.GetComponent<Rigidbody2D>().rotation = 0;

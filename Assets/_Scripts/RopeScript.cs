@@ -38,10 +38,10 @@ public class RopeScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Hook¦ì¸m±qPlayerª½½u²¾°Ê¨ì²×ÂI
+        // Hookä½ç½®å¾žPlayerç›´ç·šç§»å‹•åˆ°çµ‚é»ž
         transform.position = Vector2.MoveTowards(transform.position, destiny, speed * Time.deltaTime);
 
-        // «Ø¥ßplayer¨ìhook¤§¶¡ªºnode
+        // å»ºç«‹playeråˆ°hookä¹‹é–“çš„node
         if ((Vector2)transform.position != destiny)
         {
             if (Vector2.Distance(player.transform.position, lastNode.transform.position) > distance)
