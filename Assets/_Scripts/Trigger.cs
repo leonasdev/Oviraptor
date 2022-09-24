@@ -6,6 +6,9 @@ public class Trigger : MonoBehaviour
 {
     public GameObject pre;
     public GameObject player;
+
+    private Collider2D _lastTouchedCol;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +23,13 @@ public class Trigger : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col)
     {
-        print(col.name);
+        if(col.gameObject.CompareTag("Player") == false) return;
+
+        if(col == _lastTouchedCol) return;
+
         GameObject anchor = Instantiate(pre, transform.position, Quaternion.identity);
         anchor.GetComponent<UseMotor>().player = player;
+
+        _lastTouchedCol = col; 
     }
 }
