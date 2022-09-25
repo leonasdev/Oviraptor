@@ -18,13 +18,10 @@ public class UseMotor : MonoBehaviour
 
     void Start()
     {
-        // motor = new JointMotor2D();
-        // motor.maxMotorTorque = 10000f;
-        // motor.motorSpeed = _swingSpeed;
-        // _joint.motor = motor;
         Rigidbody2D playerRb = player.GetComponent<Rigidbody2D>();
 
-        _initPushForce = playerRb.velocity.x > 0 ? _initPushForce : _initPushForce*-1;
+        _initPushForce = playerRb.velocity.x > 0 ? Mathf.Abs(_initPushForce) : Mathf.Abs(_initPushForce)*-1;
+        print(_initPushForce);
 
         playerRb.rotation = 90;
         playerRb.velocity = new Vector2(0, 0);
