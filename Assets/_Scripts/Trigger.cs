@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class Trigger : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class Trigger : MonoBehaviour
     public GameObject player;
 
     private Collider2D _lastTouchedCol;
+    [SerializeField] private Image _flashImage;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,18 @@ public class Trigger : MonoBehaviour
         GameObject anchor = Instantiate(pre, transform.position, Quaternion.identity);
         anchor.GetComponent<UseMotor>().player = player;
 
+        ScreenFlash(100);
+
         _lastTouchedCol = col; 
+
+    }
+
+    async void ScreenFlash(int peroid)
+    {
+        _flashImage.enabled = true;
+
+        await Task.Delay(peroid);
+
+        _flashImage.enabled = false;
     }
 }
